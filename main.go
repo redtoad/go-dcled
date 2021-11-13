@@ -8,14 +8,14 @@ import (
 )
 
 func main() {
-	var list = hid.Enumerate(0x1D34, 0x0013)
+	var list = hid.Enumerate(VendorID, ProductID)
 	if len(list) == 0 {
 		println("Could not find USB device! Is it plugged in?")
 		return
 	}
 
 	// Use first device
-	var device, err = list[0].Open()
+	device, err := list[0].Open()
 	if err != nil {
 		panic(err)
 	}

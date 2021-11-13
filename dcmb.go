@@ -4,6 +4,16 @@ import (
 	"encoding/binary"
 )
 
+// USB Descriptor Information
+const (
+	VendorID           = 0x1d34
+	ProductID          = 0x0013
+	ManufacturerString = "Dream Link"
+	ProductString      = "USB LED Message Board v1.0"
+	Version            = 0x01
+	SerialNumber       = 1
+)
+
 // rowToByte takes single row of int flags (as binary representation) and converts
 // them into the corresponding byte value. Note that the values in row are reversed!
 func rowToByte(row []int) uint64 {
