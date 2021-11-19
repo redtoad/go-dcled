@@ -1,5 +1,5 @@
 
-# go-dcmb
+# go-dcled
 
 Go library for interacting with Dream Cheeky Message Board
 
