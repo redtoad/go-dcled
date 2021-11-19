@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/binary"
-	"github.com/karalabe/hid"
 )
 
 // rowToByte takes single row of int flags (as binary representation) and converts
@@ -67,8 +66,14 @@ func convertRows(grid [][]int) []uint64 {
 	return rows
 }
 
+// Device is an interface that wraps the basic Write method.
+type Device interface {
+	// Write sends bytes to LED board.
+	Write(b []byte) (int, error)
+}
+
 // DisplayGrid displays an 21 x 7 grid on a Dream Cheeky Message board (device)
-func DisplayGrid(grid [][]int, device *hid.Device) error {
+func DisplayGrid(grid [][]int, device Device) error {
 	// send rows to device as bytes
 	rows := convertRows(grid)
 	for _, row := range rows {
