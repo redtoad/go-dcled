@@ -1,4 +1,4 @@
-package main
+package dcmb
 
 import (
 	"encoding/binary"

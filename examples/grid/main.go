@@ -5,10 +5,12 @@ import (
 	"time"
 
 	"github.com/karalabe/hid"
+	"github.com/redtoad/go-dcmb"
 )
 
 func main() {
-	var list = hid.Enumerate(VendorID, ProductID)
+
+	var list = hid.Enumerate(dcmb.VendorID, dcmb.ProductID)
 	if len(list) == 0 {
 		println("Could not find USB device! Is it plugged in?")
 		return
@@ -33,7 +35,7 @@ func main() {
 	}
 
 	for {
-		_ = DisplayGrid(grid, device)
+		_ = dcmb.DisplayGrid(grid, device)
 		time.Sleep(400 * time.Millisecond)
 	}
 
