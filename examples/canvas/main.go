@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/karalabe/hid"
-	"github.com/redtoad/go-dcmb"
+	"github.com/redtoad/go-dcled"
 )
 
 func main() {
@@ -25,13 +25,13 @@ func main() {
 		panic(err)
 	}
 
-	var canvas dcmb.Canvas
+	var canvas dcled.Canvas
 	var ok bool
 	if canvas, ok = img.(*image.NRGBA); !ok {
 		panic("no NRGBA")
 	}
 
-	var list = hid.Enumerate(dcmb.VendorID, dcmb.ProductID)
+	var list = hid.Enumerate(dcled.VendorID, dcled.ProductID)
 	if len(list) == 0 {
 		println("Could not find USB device! Is it plugged in?")
 		return
@@ -52,7 +52,7 @@ func main() {
 	for {
 
 		subimg := canvas.SubImage(image.Rect(0, y, 22, y+7))
-		_ = dcmb.DisplayCanvas(subimg, device)
+		_ = dcled.DisplayCanvas(subimg, device)
 		time.Sleep(100 * time.Millisecond)
 
 		if y+7 >= maxHeight {

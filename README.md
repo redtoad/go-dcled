@@ -10,8 +10,10 @@ package main
 
 import (
   "fmt"
-  "github.com/karalabe/hid"
   "time"
+
+  "github.com/karalabe/hid"
+  "github.com/redtoad/go-dcled"
 )
 
 func main() {
@@ -35,7 +37,7 @@ func main() {
 	}
 
 	for {
-		_ = DisplayGrid(grid, device)
+		_ = dcled.DisplayGrid(grid, device)
 		time.Sleep(400 * time.Millisecond)
 	}
 }

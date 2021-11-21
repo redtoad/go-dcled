@@ -1,4 +1,4 @@
-package dcmb
+package dcled
 
 import (
 	"image"
