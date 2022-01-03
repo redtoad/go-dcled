@@ -10,7 +10,9 @@ package fonts
 
 var SmallInvFont Font = Font{
 
-	Name: "small_inv",
+	Name:       "small_inv",
+	CharWidth:  4,
+	CharHeight: 7,
 	Chars: [][]byte{
 
 		{0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55}, // 0:

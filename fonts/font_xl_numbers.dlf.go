@@ -10,7 +10,9 @@ package fonts
 
 var SevenSegXLFont Font = Font{
 
-	Name: "SevenSegXL",
+	Name:       "SevenSegXL",
+	CharWidth:  5,
+	CharHeight: 7,
 	Chars: [][]byte{
 
 		{0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa}, // 0:

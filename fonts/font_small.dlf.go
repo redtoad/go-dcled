@@ -10,7 +10,9 @@ package fonts
 
 var SmallFont Font = Font{
 
-	Name: "small",
+	Name:       "small",
+	CharWidth:  4,
+	CharHeight: 7,
 	Chars: [][]byte{
 
 		{0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa}, // 0:

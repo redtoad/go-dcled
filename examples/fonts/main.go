@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	img := fonts.Text("The quick fox jumped over the lazy fox! @#§\"%&?/()", fonts.SmallInvFont)
+	img := fonts.Text("The quick fox jumps over the lazy dog! @#§\"%&?/() 0123456789", fonts.SevenSegXLFont)
 
 	var list = hid.Enumerate(dcled.VendorID, dcled.ProductID)
 	if len(list) == 0 {

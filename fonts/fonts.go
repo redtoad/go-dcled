@@ -13,6 +13,7 @@ import (
 
 /*
 	From the comment in the original code:
+	https://github.com/kost/dcled/blob/master/dcled.c
 
 	Font is 7 bytes per entry, each byte is a row.  The character bitmaps are
 	like 5 bits wide, mirrored, starting at bit zero.  Why so bizzare, you
@@ -24,36 +25,37 @@ import (
 	for an afternoon project.  Feel free to improve it. :)
 */
 type Font struct {
-	Name  string
-	Meta  map[string]string
-	Chars [][]byte
+	Name       string
+	CharWidth  int
+	CharHeight int
+	Chars      [][]byte
+
+	Meta map[string]string
 }
 
 // Text creates an image out of a string which can be displayed.
 func Text(txt string, font Font) image.Image {
 
-	charWidth := 5
-	charHeight := 7
-	gap := 0
+	gap := 0 // TODO(srahlf): make gap configurable
 
 	// We'll convert this into an array of runes,
 	// otherwise the count is off for unicode character.
 	characters := []rune(txt)
 
-	width := (charWidth + gap) * len(characters)
-	img := image.NewNRGBA(image.Rect(0, 0, width, charHeight))
+	width := (font.CharWidth + gap) * len(characters)
+	img := image.NewNRGBA(image.Rect(0, 0, width, font.CharHeight))
 
 	for pos := 0; pos < len(characters); pos++ {
 		chr := characters[pos]
 		data := font.Chars[int(chr)]
 		for row, rowData := range data {
-			for idx := 0; idx < charWidth; idx++ {
+			for idx := 0; idx < font.CharWidth; idx++ {
 				mask := 1 << idx
 				colour := dcled.Off
 				if mask&int(rowData) == mask {
 					colour = dcled.On
 				}
-				img.Set(pos*(charWidth+gap)+idx, row, colour)
+				img.Set(pos*(font.CharWidth+gap)+idx, row, colour)
 			}
 		}
 	}

@@ -6,12 +6,14 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"go/format"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -19,6 +21,27 @@ import (
 	"github.com/redtoad/go-dcled/fonts"
 )
 
+var (
+	ErrInvalidSize = errors.New("invalid character size specified")
+	ErrNoSize      = errors.New("no character size specified")
+)
+
+// convertToInt converts a list of strings into a list on ints.
+func convertToInt(txt ...string) ([]int, error) {
+	fmt.Printf("convertToInt: %v\n", txt)
+	numbers := make([]int, len(txt))
+	for i, t := range txt {
+		fmt.Printf("i: %v, t: %#v\n", i, t)
+		val, err := strconv.Atoi(strings.TrimSpace(t))
+		if err != nil {
+			return numbers, err
+		}
+		numbers[i] = val
+	}
+	return numbers, nil
+}
+
+// LoadFontFile loads a Font object from a .dlf file.
 func LoadFontFile(path string) (*fonts.Font, error) {
 
 	file, err := os.Open(path)
@@ -40,7 +63,7 @@ func LoadFontFile(path string) (*fonts.Font, error) {
 		line := scanner.Text()
 
 		// meta data
-		// TODO load character size (e.g. "Size: 5 x 7")
+		// example: "Size: 5 x 7"
 		matches := metaReg.FindSubmatch([]byte(line))
 		if len(matches) > 0 {
 			key := string(matches[1])
@@ -65,10 +88,30 @@ func LoadFontFile(path string) (*fonts.Font, error) {
 
 	// Now that we have loaded everything, we can use the
 	// metadata from the file (if present).
+
 	if name, ok := font.Meta["Name"]; ok {
 		font.Name = name
 	} else {
 		font.Name = filepath.Base(path)
+	}
+
+	if size, ok := font.Meta["Size"]; ok {
+		parts := strings.Split(size, "x")
+		fmt.Printf("parts: %v\n", parts)
+		if len(parts) != 2 {
+			return font, ErrInvalidSize
+		}
+		sizes, err2 := convertToInt(parts...)
+		fmt.Printf("sizes: %v\n", sizes)
+		if err2 != nil {
+			return font, ErrInvalidSize
+		}
+
+		font.CharWidth = sizes[0]
+		font.CharHeight = sizes[1]
+
+	} else {
+		return font, ErrNoSize
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -78,6 +121,7 @@ func LoadFontFile(path string) (*fonts.Font, error) {
 	return font, nil
 }
 
+// WriteFontFile creates a Go file with a font declaration.
 func WriteFontFile(font fonts.Font, path string) error {
 	f, err := os.Create(path)
 	if err != nil {
@@ -149,6 +193,8 @@ package fonts
 var {{ .Meta.Name | ToCamelCase }}Font Font = Font{
 
 	Name: "{{ .Meta.Name }}",
+	CharWidth: {{ .CharWidth }},
+	CharHeight: {{ .CharHeight }},
 	Chars: [][]byte{
 		{{ range $chr, $val := .Chars }}
 		{ 
