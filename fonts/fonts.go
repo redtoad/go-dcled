@@ -4,6 +4,7 @@ package fonts
 
 import (
 	"image"
+	"image/draw"
 
 	"github.com/redtoad/go-dcled"
 )
@@ -33,7 +34,7 @@ type Font struct {
 }
 
 // Text creates an image out of a string which can be displayed.
-func Text(txt string, font Font) image.Image {
+func Text(txt string, font Font) draw.Image {
 
 	gap := 0 // TODO(srahlf): make gap configurable
 

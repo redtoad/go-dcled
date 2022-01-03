@@ -27,9 +27,8 @@ func main() {
 
 	for {
 		now := time.Now()
-		img := fonts.Text(fmt.Sprintf("%02d %02d", now.Hour(), now.Minute()), fonts.SevenSegXLFont)
-		//dcled.Center(device, img)
-		_ = dcled.DisplayCanvas(img, device)
+		img := fonts.Text(fmt.Sprintf(">>>> %02d:%02d <<<<", now.Hour(), now.Minute()), fonts.SmallFont)
+		dcled.Center(device, img)
 		time.Sleep(dcled.MinimumRefreshRate)
 	}
 

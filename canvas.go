@@ -3,6 +3,7 @@ package dcled
 import (
 	"image"
 	"image/color"
+	"image/draw"
 	"time"
 )
 
@@ -10,6 +11,11 @@ import (
 var (
 	On  = color.RGBA{0xff, 0x00, 0x00, 0xff} // red
 	Off = color.RGBA{0x00, 0x00, 0x00, 0xff} // black
+)
+
+const (
+	DeviceHeight = 7
+	DeviceWidth  = 21
 )
 
 // IsOn will return true if Color c represents on.
@@ -38,21 +44,13 @@ func monochromeModel(c color.Color) color.Color {
 	return Off
 }
 
-// Canvas is an in-memory image whose At method returns either
-// black (off) or red (on).
-type Canvas interface {
-	Bounds() image.Rectangle
-	At(x, y int) color.Color
-	SubImage(r image.Rectangle) image.Image
-}
-
 func canvasToGrid(img image.Image) [][]int {
-	grid := make([][]int, 7)
+	grid := make([][]int, DeviceHeight)
 	xOff := img.Bounds().Min.X
 	yOff := img.Bounds().Min.Y
-	for y := 0; y < 7; y++ {
-		grid[y] = make([]int, 21)
-		for x := 0; x < 21; x++ {
+	for y := 0; y < DeviceHeight; y++ {
+		grid[y] = make([]int, DeviceWidth)
+		for x := 0; x < DeviceWidth; x++ {
 			if IsOn(img.At(x+xOff, y+yOff)) {
 				grid[y][x] = 1
 			} else {
@@ -71,22 +69,44 @@ func DisplayCanvas(img image.Image, device Device) error {
 	return DisplayGrid(grid, device)
 }
 
-// Scroll will scroll an image across the device.
-func Scroll(dev Device, img Canvas) {
+// NewCanvas returns a new blank image of 21x7 pixels.
+func NewCanvas() draw.Image {
+	img := image.NewRGBA(image.Rect(0, 0, DeviceWidth, DeviceHeight))
+	draw.Draw(img, img.Bounds(), &image.Uniform{Off}, image.Point{0, 0}, draw.Src)
+	return img
+}
 
-	maxWidth := img.Bounds().Dx()
+// Scroll will scroll an image across the device.
+func Scroll(dev Device, img draw.Image) {
 	x := 0
 	dir := 1
+	dst := NewCanvas()
+	sr := img.Bounds()
 
 	for {
-		subimg := img.SubImage(image.Rect(x, 0, x+22, 8))
-		_ = DisplayCanvas(subimg, dev)
+		r := sr.Sub(image.Point{x, 0})
+		draw.Draw(dst, r, img, sr.Min, draw.Src)
+		_ = DisplayCanvas(dst, dev)
 		time.Sleep(50 * time.Millisecond)
 
 		x += dir
-
-		if x >= maxWidth {
+		if x >= sr.Dx() {
 			x = 0
 		}
 	}
+}
+
+// Center will center an image on the Device.
+func Center(dev Device, img draw.Image) {
+	sr := img.Bounds()
+	width := sr.Dx()
+	height := sr.Dy()
+
+	dx := (DeviceWidth - width) / 2
+	dy := (DeviceHeight - height) / 2
+
+	dst := NewCanvas()
+	r := sr.Add(image.Point{dx, dy})
+	draw.Draw(dst, r, img, sr.Min, draw.Src)
+	_ = DisplayCanvas(dst, dev)
 }

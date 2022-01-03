@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"image"
+	"image/draw"
 	"image/png"
 	"os"
 	"time"
@@ -25,7 +26,7 @@ func main() {
 		panic(err)
 	}
 
-	var canvas dcled.Canvas
+	var canvas draw.Image
 	var ok bool
 	if canvas, ok = img.(*image.NRGBA); !ok {
 		panic("no NRGBA")
@@ -45,17 +46,19 @@ func main() {
 
 	println(fmt.Sprintf("Connected to %s %s", device.Manufacturer, device.Product))
 
-	maxHeight := canvas.Bounds().Dy()
 	y := 0
 	dir := +1
 
+	dst := dcled.NewCanvas()
+	sr := canvas.Bounds()
+
 	for {
+		r := sr.Sub(image.Point{0, y})
+		draw.Draw(dst, r, img, sr.Min, draw.Src)
+		_ = dcled.DisplayCanvas(dst, device)
+		time.Sleep(50 * time.Millisecond)
 
-		subimg := canvas.SubImage(image.Rect(0, y, 22, y+7))
-		_ = dcled.DisplayCanvas(subimg, device)
-		time.Sleep(100 * time.Millisecond)
-
-		if y+7 >= maxHeight {
+		if y+7 >= sr.Dy() {
 			dir = -1
 		}
 
