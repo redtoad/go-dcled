@@ -1,7 +1,7 @@
 package fonts
 
 // Author : Jeff Jahr
-// Description : This is the default font used in dcled, taken from X11's 5x7
+// Description : This is the default font used in dcled, taken from X11's 5x7 (see https://github.com/kost/dcled/blob/master/dcled.c)
 // Size : 5 x 7
 
 var DefaultFont = Font{

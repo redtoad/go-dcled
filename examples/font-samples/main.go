@@ -15,7 +15,7 @@ func main() {
 		fonts.DefaultFont,
 		fonts.SgaFont,
 		fonts.SmallInvFont,
-		fonts.XxxFont,
+		fonts.SevenSegXLFont,
 	} {
 
 		txt := ""

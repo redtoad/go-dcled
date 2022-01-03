@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	img := fonts.Text("Hallo Margit! Wollen wir ins Bett?", fonts.SmallInvFont)
+	img := fonts.Text("The quick fox jumped over the lazy fox! @#§\"%&?/()", fonts.SmallInvFont)
 
 	var list = hid.Enumerate(dcled.VendorID, dcled.ProductID)
 	if len(list) == 0 {
@@ -27,6 +27,6 @@ func main() {
 
 	println(fmt.Sprintf("Connected to %s %s", device.Manufacturer, device.Product))
 
-	fonts.Scroll(device, img.(*image.NRGBA))
+	dcled.Scroll(device, img.(*image.NRGBA))
 
 }
