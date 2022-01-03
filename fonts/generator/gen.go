@@ -28,10 +28,8 @@ var (
 
 // convertToInt converts a list of strings into a list on ints.
 func convertToInt(txt ...string) ([]int, error) {
-	fmt.Printf("convertToInt: %v\n", txt)
 	numbers := make([]int, len(txt))
 	for i, t := range txt {
-		fmt.Printf("i: %v, t: %#v\n", i, t)
 		val, err := strconv.Atoi(strings.TrimSpace(t))
 		if err != nil {
 			return numbers, err
@@ -97,12 +95,10 @@ func LoadFontFile(path string) (*fonts.Font, error) {
 
 	if size, ok := font.Meta["Size"]; ok {
 		parts := strings.Split(size, "x")
-		fmt.Printf("parts: %v\n", parts)
 		if len(parts) != 2 {
 			return font, ErrInvalidSize
 		}
 		sizes, err2 := convertToInt(parts...)
-		fmt.Printf("sizes: %v\n", sizes)
 		if err2 != nil {
 			return font, ErrInvalidSize
 		}
