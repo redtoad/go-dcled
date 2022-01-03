@@ -36,7 +36,7 @@ func main() {
 
 	for {
 		_ = dcled.DisplayGrid(grid, device)
-		time.Sleep(400 * time.Millisecond)
+		time.Sleep(dcled.MinimumRefreshRate)
 	}
 
 }

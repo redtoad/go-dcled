@@ -78,7 +78,7 @@ func ExampleDisplayGrid() {
 
 	for {
 		_ = DisplayGrid(grid, device)
-		time.Sleep(400 * time.Millisecond)
+		time.Sleep(MinimumRefreshRate)
 	}
 
 }
