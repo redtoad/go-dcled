@@ -3,8 +3,6 @@ package dcled
 import (
 	"image"
 	"image/color"
-
-	"github.com/karalabe/hid"
 )
 
 // Colors used when displaying Canvas as image.
@@ -67,7 +65,7 @@ func canvasToGrid(img image.Image) [][]int {
 // DisplayCanvas displays an image.Image on the Dream Cheeky
 // Message board. Pixels of color #ff0000 (On) will turn the
 // respective leds on, other color will turn them off.
-func DisplayCanvas(img image.Image, device *hid.Device) error {
+func DisplayCanvas(img image.Image, device Device) error {
 	grid := canvasToGrid(img)
 	return DisplayGrid(grid, device)
 }
