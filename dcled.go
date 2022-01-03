@@ -1,7 +1,8 @@
-package main
+package dcled
 
 import (
 	"encoding/binary"
+	"time"
 )
 
 // USB Descriptor Information
@@ -13,6 +14,8 @@ const (
 	Version            = 0x01
 	SerialNumber       = 1
 )
+
+const MinimumRefreshRate = 400 * time.Millisecond
 
 // rowToByte takes single row of int flags (as binary representation) and converts
 // them into the corresponding byte value. Note that the values in row are reversed!
