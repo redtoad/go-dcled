@@ -3,6 +3,7 @@ package dcled
 import (
 	"image"
 	"image/color"
+	"time"
 )
 
 // Colors used when displaying Canvas as image.
@@ -68,4 +69,24 @@ func canvasToGrid(img image.Image) [][]int {
 func DisplayCanvas(img image.Image, device Device) error {
 	grid := canvasToGrid(img)
 	return DisplayGrid(grid, device)
+}
+
+// Scroll will scroll an image across the device.
+func Scroll(dev Device, img Canvas) {
+
+	maxWidth := img.Bounds().Dx()
+	x := 0
+	dir := 1
+
+	for {
+		subimg := img.SubImage(image.Rect(x, 0, x+22, 8))
+		_ = DisplayCanvas(subimg, dev)
+		time.Sleep(50 * time.Millisecond)
+
+		x += dir
+
+		if x >= maxWidth {
+			x = 0
+		}
+	}
 }

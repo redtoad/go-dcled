@@ -4,7 +4,6 @@ package fonts
 
 import (
 	"image"
-	"time"
 
 	"github.com/redtoad/go-dcled"
 )
@@ -66,23 +65,3 @@ const (
 	LoopHorizontally int = iota + 1
 	LoopVertically
 )
-
-// Scroll will scroll an image across the device.
-func Scroll(dev dcled.Device, img dcled.Canvas) {
-
-	maxWidth := img.Bounds().Dx()
-	x := 0
-	dir := 1
-
-	for {
-		subimg := img.SubImage(image.Rect(x, 0, x+22, 8))
-		_ = dcled.DisplayCanvas(subimg, dev)
-		time.Sleep(50 * time.Millisecond)
-
-		x += dir
-
-		if x >= maxWidth {
-			x = 0
-		}
-	}
-}
