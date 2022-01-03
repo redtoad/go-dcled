@@ -1,7 +1,5 @@
 package main
 
-//go:generate go run ./fonts/gen.go ./fonts/*.dlf
-
 import (
 	"fmt"
 	"time"
