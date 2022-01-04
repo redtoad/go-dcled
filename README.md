@@ -53,5 +53,5 @@ func main() {
 
 See `examples/` for more information.
 
-Based on code by [MylesIsCool](https://gist.github.com/MylesIsCool/227a64a679fb0fc8432fe1c342f526dd). 
+Based on code by [MylesIsCool](https://gist.github.com/FormallyMyles/227a64a679fb0fc8432fe1c342f526dd). 
 Very helpful: [The Last Outpost ](https://www.last-outpost.com/~malakai/dcled/)
