@@ -3,7 +3,7 @@
 
 Go library for interacting with Dream Cheeky Message Board
 
-![](result.jpg)
+![](examples/canvas/result.gif)
 
 ## Usage
 
